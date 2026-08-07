@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: receiver-service
+server:
+  port: 8081
+
+webhook:
+  secret: super-secreto-123
+
+logging:
+  level:
+    com.example.receiver: DEBUG
