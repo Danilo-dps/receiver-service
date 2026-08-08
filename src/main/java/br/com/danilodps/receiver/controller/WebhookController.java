@@ -18,20 +18,20 @@ public class WebhookController {
     private final WebhookProcessorService processor;
     private final WebhookSignatureVerifier signatureVerifier;
 
-    @PostMapping("/pedido-evento")
-    public ResponseEntity<Void> receberWebhook(
+    @PostMapping("/order-event")
+    public ResponseEntity<Void> receiverWebhook(
             @RequestHeader("X-Webhook-Signature") String signature,
             @RequestHeader("X-Webhook-Id") String eventId,
-            @RequestBody EventRequest evento) {
+            @RequestBody EventRequest event) {
 
         log.info("[Receiver] Webhook recebido: {}", eventId);
 
-        if (!signatureVerifier.verifySignature(evento, signature)) {
+        if (!signatureVerifier.verifySignature(event, signature)) {
             log.error("[Receiver] Assinatura inválida para evento {}", eventId);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        processor.process(evento);
+        processor.process(event);
         return ResponseEntity.ok().build();
     }
 
