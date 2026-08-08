@@ -26,8 +26,6 @@ public class WebhookProcessorService {
                 event.orderId(), event.status(), event.price());
         log.info("[Receiver] ====================================");
 
-        // Aqui você atualizaria estoque, enviaria e-mail, etc.
-
         eventosProcessados.add(event.eventId());
     }
 }

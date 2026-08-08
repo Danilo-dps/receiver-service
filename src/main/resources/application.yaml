@@ -2,10 +2,10 @@ spring:
   application:
     name: receiver-service
 server:
-  port: 8081
+  port: ${SERVER_PORT}
 
 webhook:
-  secret: super-secreto-123
+  secret: ${WEBHOOK_SECRET}
 
 logging:
   level:

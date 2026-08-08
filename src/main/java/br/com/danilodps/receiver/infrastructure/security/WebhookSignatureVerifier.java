@@ -17,7 +17,7 @@ public class WebhookSignatureVerifier {
     private final ObjectMapper objectMapper;
     private static final String HMAC_ALGO = "HmacSHA256";
 
-    @Value("${webhook.secret:super-secreto-123}")
+    @Value("${webhook.secret}")
     private String secret;
 
     @SneakyThrows
