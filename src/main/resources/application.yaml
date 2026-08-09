@@ -4,9 +4,13 @@ spring:
 server:
   port: ${SERVER_PORT}
 
-webhook:
-  secret: ${WEBHOOK_SECRET}
+coordinator:
+  url: ${COORDINATOR_URL}
 
-logging:
-  level:
-    com.example.receiver: DEBUG
+webhook:
+  timestamp:
+    tolerance: ${TIMESTAMP_TOLERANCE}
+
+#logging:
+#  level:
+#    br.com.danilodps.receiver: DEBUG

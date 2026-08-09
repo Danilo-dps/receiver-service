@@ -12,10 +12,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WebhookProcessorService {
 
     // Idempotência em memória (produção: Redis ou banco)
-    private final Set<String> eventosProcessados = ConcurrentHashMap.newKeySet();
+    private final Set<String> processedEvents = ConcurrentHashMap.newKeySet();
 
     public void process(EventRequest event) {
-        if (eventosProcessados.contains(event.eventId())) {
+        if (processedEvents.contains(event.eventId())) {
             log.warn("[Receiver] Evento {} já processado. Ignorando.", event.eventId());
             return;
         }
@@ -26,6 +26,7 @@ public class WebhookProcessorService {
                 event.orderId(), event.status(), event.price());
         log.info("[Receiver] ====================================");
 
-        eventosProcessados.add(event.eventId());
+        processedEvents.add(event.eventId());
     }
+
 }
