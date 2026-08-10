@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 dev.env
 .env
+.dockerignore
 
 ### STS ###
 .apt_generated
