@@ -10,7 +10,7 @@ import org.springframework.web.client.RestClient;
 @Component
 public class CoordinatorClient {
 
-    private final static String SECRET_CURRENT_URI = "/secrets/current";
+    private static final String SECRET_CURRENT_URI = "/secrets/current";
     private final RestClient coordinatorRestClient;
 
     public CoordinatorClient(RestClient coordinatorRestClient) {

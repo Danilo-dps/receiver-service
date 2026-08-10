@@ -4,7 +4,6 @@ import br.com.danilodps.receiver.infrastructure.cache.DualSecretCache;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import tools.jackson.databind.ObjectMapper;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -16,21 +15,18 @@ import java.util.Base64;
 @Component
 public class WebhookSignatureVerifier {
 
-    private final ObjectMapper objectMapper;
     private final DualSecretCache secretCache;
     private static final String HMAC_ALGO = "HmacSHA256";
 
-    @Value("${webhook.timestamp.tolerance:300}")
+    @Value("${webhook.timestamp.tolerance}")
     private long timestampTolerance;
 
-    public WebhookSignatureVerifier(ObjectMapper objectMapper, DualSecretCache secretCache) {
-        this.objectMapper = objectMapper;
+    public WebhookSignatureVerifier(DualSecretCache secretCache) {
         this.secretCache = secretCache;
     }
 
     @SneakyThrows
-    public VerificationResult verifySignature(String signatureHeader, long timestamp,
-                                              String eventId, Object payload) {
+    public VerificationResult verifySignature(String signatureHeader, long timestamp, String eventId, String payload) {
 
         // 1. Valida timestamp
         long now = Instant.now().getEpochSecond();
@@ -53,15 +49,12 @@ public class WebhookSignatureVerifier {
             return VerificationResult.fail("Versão desconhecida no cache: " + version);
         }
 
-        // 4. Reconstroi a string canonica
-        String bodyJson = objectMapper.writeValueAsString(payload);
-        String signedContent = String.format("%s.%d.%s.%s",
-                version, timestamp, eventId, bodyJson);
+        String signedContent = String.format("%s.%d.%s.%s", version, timestamp, eventId, payload);
 
-        // 5. Recalcula HMAC
+        // 4. Recalcula HMAC
         String expectedSignature = calculateHmac(signedContent, cached.secret());
 
-        // 6. Comparação segura contra timing attack
+        // 5. Comparação segura contra timing attack
         boolean valid = MessageDigest.isEqual(
                 signatureReceived.getBytes(StandardCharsets.UTF_8),
                 expectedSignature.getBytes(StandardCharsets.UTF_8)

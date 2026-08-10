@@ -26,7 +26,7 @@ public class WebhookController {
             @RequestHeader("X-Webhook-Signature") String signature,
             @RequestHeader("X-Webhook-Timestamp") long timestamp,
             @RequestHeader("X-Webhook-Id") String eventId,
-            @RequestBody EventRequest event) {
+            @RequestBody String event) {
 
         log.info("[Receiver] Webhook recebido: {} [ts: {}]", eventId, timestamp);
 
@@ -38,7 +38,7 @@ public class WebhookController {
         }
 
         log.info("[Receiver] Assinatura válida (versão {})", result.version());
-        processor.process(event);
+        processor.process(eventId);
         return ResponseEntity.ok().build();
     }
 

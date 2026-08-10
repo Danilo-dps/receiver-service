@@ -1,6 +1,5 @@
 package br.com.danilodps.receiver.application.service;
 
-import br.com.danilodps.receiver.domain.EventRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,19 +13,18 @@ public class WebhookProcessorService {
     // Idempotência em memória (produção: Redis ou banco)
     private final Set<String> processedEvents = ConcurrentHashMap.newKeySet();
 
-    public void process(EventRequest event) {
-        if (processedEvents.contains(event.eventId())) {
-            log.warn("[Receiver] Evento {} já processado. Ignorando.", event.eventId());
+    public void process(String eventId) {
+
+        if (processedEvents.contains(eventId)) {
+            log.warn("[Receiver] Evento {} já processado. Ignorando.", eventId);
             return;
         }
 
         log.info("[Receiver] ====================================");
-        log.info("[Receiver] Processando evento: {}", event.eventId());
-        log.info("[Receiver] Pedido: {} | Status: {} | Valor: R$ {}",
-                event.orderId(), event.status(), event.price());
+        log.info("[Receiver] Processando evento: {}", eventId);
         log.info("[Receiver] ====================================");
 
-        processedEvents.add(event.eventId());
+        processedEvents.add(eventId);
     }
 
 }
