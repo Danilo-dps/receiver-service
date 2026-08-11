@@ -1,5 +1,6 @@
 package br.com.danilodps.receiver.infrastructure.security;
 
+import br.com.danilodps.receiver.domain.VerificationResult;
 import br.com.danilodps.receiver.infrastructure.cache.DualSecretCache;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
@@ -73,15 +74,6 @@ public class WebhookSignatureVerifier {
         return Base64.getEncoder().encodeToString(
                 mac.doFinal(content.getBytes(StandardCharsets.UTF_8))
         );
-    }
-
-    public record VerificationResult(boolean valid, String version, String error) {
-        static VerificationResult ok(String v) {
-            return new VerificationResult(true, v, null);
-        }
-        static VerificationResult fail(String e) {
-            return new VerificationResult(false, null, e);
-        }
     }
 
 }

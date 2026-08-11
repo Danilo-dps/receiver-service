@@ -11,6 +11,11 @@ webhook:
   timestamp:
     tolerance: ${TIMESTAMP_TOLERANCE}
 
+web:
+  cors:
+    allowed-origins:
+      - ${FRONTEND_URL}
+
 #logging:
 #  level:
 #    br.com.danilodps.receiver: DEBUG
